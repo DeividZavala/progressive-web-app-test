@@ -1,30 +1,38 @@
-define(['./template.js'], function(template) {
+define(['./template.js','./carStorage.js'], function(template, carStorage) {
     'use strict';
 
-    var ApiUrlPath = 'https://bstavroulakis.com/pluralsight/courses/progressive-web-apps/service/'
-    var ApiUrlLatest = ApiUrlPath + 'latest-deals.php';
-    var ApiUrlCar = ApiUrlPath + 'car.php?carid='
+    var apiUrlPath = 'https://bstavroulakis.com/pluralsight/courses/progressive-web-apps/service/';
+    var apiUrlLatest = apiUrlPath + 'latest-deals.php';
+    var apiUrlCar = apiUrlPath + 'car.php?carId=';
 
     function loadMoreRequest() {
-        fetch(ApiUrlLatest)
+        fetch(apiUrlLatest + "?carId=" + carStorage.getLastCarId())
             .then(function (response) {
                 return response.json()
             })
             .then(function (data) {
-                console.log(data)
-                template.appendCar(data.cars);
+                console.log(data.cars)
+                carStorage.addCars(data.cars)
+                    .then(function () {
+                        loadMore();
+                    })
             })
     }
 
+    function loadMore(){
+        carStorage.getCars().then(function(cars){
+            template.appendCars(cars);
+        });
+    }
+
     function loadCarPage(carId){
-        fetch(ApiUrlCar + carId)
+        fetch(apiUrlCar + carId)
         .then(function(response){
             return response.text();
         }).then(function(data){
-            console.log(data)
             document.body.insertAdjacentHTML('beforeend', data);
         }).catch(function(){
-            alert("Oops, algo salio mal papud");
+            alert("Oops, can't retrieve page");
         });
     }
 

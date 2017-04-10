@@ -22,7 +22,9 @@
                 <span class="mdl-layout-title">Car Deals</span>
                 <div class="mdl-layout-spacer"></div>
                 <nav class="mdl-navigation">
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect">
+                    <button 
+                    onclick="location.reload()"
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect">
                         Refresh
                     </button>
                 </nav>
@@ -41,7 +43,9 @@
 
             </div>
             <div class="center">
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                <button 
+                onclick="pageEvents.loadMore()"
+                class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
                     Show More
                 </button>
             </div>
@@ -61,6 +65,9 @@
     <script src="/node_modules/es6-promise-polyfill/promise.min.js"></script>
     <script src="/node_modules/systemjs/dist/system.js"></script>
     <script src="/node_modules/whatwg-fetch/fetch.js"></script>
+    <script src="localforage/localforage.min.js"></script>
+    <script src="localforage/localforage-getitems.js"></script>
+    <script src="localforage/localforage-setitems.js"></script>
 
     <script>
         System.import('./js/app.js')
