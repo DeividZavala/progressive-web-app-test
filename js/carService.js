@@ -6,7 +6,16 @@ define(['./template.js','./carStorage.js'], function(template, carStorage) {
     var apiUrlCar = apiUrlPath + 'car.php?carId=';
 
     function loadMoreRequest() {
-        fetch(apiUrlLatest + "?carId=" + carStorage.getLastCarId())
+        fetchPromise()
+        .then(function(status){
+            document.getElementById("connection-status").innerHTML = status;
+            loadMore();
+        });
+    }
+
+    function fetchPromise() {
+        return new Promise(function (resolve, reject) {
+            fetch(apiUrlLatest + "?carId=" + carStorage.getLastCarId())
             .then(function (response) {
                 return response.json()
             })
@@ -14,9 +23,15 @@ define(['./template.js','./carStorage.js'], function(template, carStorage) {
                 console.log(data.cars)
                 carStorage.addCars(data.cars)
                     .then(function () {
-                        loadMore();
+                        resolve("Todo chido, hay conexión")
                     })
+            }).catch(function (e) {
+                resolve("no hay conexión a la red")
             })
+            setTimeout(function () {
+                resolve("mostrando los resultados guardados")
+            }, 3000);
+        })
     }
 
     function loadMore(){
