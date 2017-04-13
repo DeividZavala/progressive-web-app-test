@@ -1,6 +1,4 @@
-
 var carService = require('./carService.js');
-
 
 window.pageEvents = {
     loadCarPage: function (carId) {

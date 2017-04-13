@@ -23,10 +23,11 @@ define(['./template.js','./carStorage.js'], function(template, carStorage) {
                 console.log(data.cars)
                 carStorage.addCars(data.cars)
                     .then(function () {
+                        data.cars.forEach(preCacheDetailsPage);
                         resolve("Todo chido, hay conexión")
                     })
             }).catch(function (e) {
-                resolve("no hay conexión a la red")
+                resolve("no hay conexión a la red, mostrando datos guardados")
             })
             setTimeout(function () {
                 resolve("mostrando los resultados guardados")
@@ -49,6 +50,17 @@ define(['./template.js','./carStorage.js'], function(template, carStorage) {
         }).catch(function(){
             alert("Oops, can't retrieve page");
         });
+    }
+
+    function preCacheDetailsPage(car){
+        if ('serviceWorker' in navigator) {
+            var carDetailsUrl = apiUrlCar + car.value.details_id;
+            window.caches.open('carDealsCachePagesV1').then(function(cache) {
+                cache.match(carDetailsUrl).then(function(response){
+                    if(!response) cache.add(new Request(carDetailsUrl));
+                })
+            });
+        }
     }
 
     return {
